@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  traefik:
+    image: traefik
+    restart: always
+    command: -c /dev/null --web --docker --logLevel=DEBUG
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8080:8080'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./traefik.toml:/traefik.toml
+#      - ./acme.json:/acme.json
+    networks:
+      - web
+    labels:
+      - 'traefik.frontend.rule=Host:traefik.l'
+      - 'traefik.port=8080'
+    container_name: traefik
+
+networks:
+  web:
+    external: true
